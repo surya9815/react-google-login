@@ -1,22 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleLogout } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 function App() {
+  // function logout() {
+  //   console.log("logout");
+  //   googleLogout();
+  // }
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+            console.log(credentialResponse.credential);
+            var token = credentialResponse.credential;
+            var decoded = jwt_decode(token);
+            console.log(decoded);
+            console.log("LOGGED IN");
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+        <button
+          onClick={() => {
+            console.log("logout");
+            googleLogout();
+          }}
         >
-          Learn React
-        </a>
+          Logout
+        </button>
       </header>
     </div>
   );
